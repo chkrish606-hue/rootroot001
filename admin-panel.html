@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+    <title>KP PANEL SHOP | ADMIN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <script src="https://zapupi.com/single-html-web-kit.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --surface: #111111;
+            --surface-light: #1a1a1a;
+            --border: #2a2a2a;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --accent: #bc13fe; 
+            --accent-secondary: #00f0ff;
+            --success: #00ff66;
+            --danger: #ff2a5f;
+            --warning: #ffb800;
+            --neon-crypto: #F3BA2F;
+            --sidebar-width: 260px;
+            --radius: 12px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.5);
+            --font: 'Poppins', sans-serif;
+        }
+        body.light-theme {
+            --bg-dark: #f8fafc;
+            --surface: #ffffff;
+            --surface-light: #f1f5f9;
+            --border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font); }
+        html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+        body { background-color: var(--bg-dark); color: var(--text-main); overflow: hidden; transition: background-color 0.3s; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        .hidden { display: none !important; }
+        .glass { background: rgba(17, 17, 17, 0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border); }
+        body.light-theme .glass { background: rgba(255, 255, 255, 0.7); }
+
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 18px; font-size: 13px; font-weight: 600; border-radius: 8px; border: none; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; outline: none; }
+        .btn-primary { background: linear-gradient(135deg, var(--accent), #7a0bc0); color: #fff; box-shadow: 0 4px 15px rgba(188, 19, 254, 0.3); }
+        .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(188, 19, 254, 0.5); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
+        .btn-outline:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); background: rgba(188, 19, 254, 0.05); }
+        .btn-danger { background: rgba(255, 42, 95, 0.1); color: var(--danger); border: 1px solid rgba(255, 42, 95, 0.2); }
+        .btn-danger:hover:not(:disabled) { background: var(--danger); color: #fff; box-shadow: 0 0 15px rgba(255, 42, 95, 0.4); }
+        .btn-success { background: rgba(0, 255, 102, 0.1); color: var(--success); border: 1px solid rgba(0, 255, 102, 0.2); }
+        .btn-success:hover:not(:disabled) { background: var(--success); color: #000; box-shadow: 0 0 15px rgba(0, 255, 102, 0.4); }
+        .btn-sm { padding: 6px 12px; font-size: 11px; border-radius: 6px; }
+        .btn-block { width: 100%; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); box-shadow: none !important; transform: none !important; }
+        .icon-btn { background: none; border: none; color: var(--text-muted); font-size: 18px; cursor: pointer; transition: 0.3s; padding: 8px; border-radius: 8px; }
+        .icon-btn:hover { background: var(--surface-light); color: var(--accent); }
+
+        .form-group { margin-bottom: 20px; width: 100%; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 13px; color: var(--text-muted); font-weight: 500; }
+        .form-input { width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main); outline: none; transition: 0.3s; font-size: 14px; }
+        body.light-theme .form-input { background: rgba(255,255,255,0.5); }
+        .form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(188, 19, 254, 0.1); }
+        .input-with-icon { position: relative; }
+        .input-with-icon .form-input { padding-left: 45px; }
+        .input-with-icon i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 16px; transition: 0.3s; }
+        .form-input:focus ~ i, .input-with-icon .form-input:focus + i { color: var(--accent); }
+
+        .badge { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 4px; }
+        .badge-pending { background: rgba(255, 184, 0, 0.15); color: var(--warning); border: 1px solid rgba(255, 184, 0, 0.3); }
+        .badge-approved, .badge-active, .badge-success { background: rgba(0, 255, 102, 0.15); color: var(--success); border: 1px solid rgba(0, 255, 102, 0.3); }
+        .badge-rejected, .badge-inactive, .badge-danger { background: rgba(255, 42, 95, 0.15); color: var(--danger); border: 1px solid rgba(255, 42, 95, 0.3); }
+
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(5px); transition: opacity 0.3s ease; }
+        .spinner { width: 45px; height: 45px; border: 4px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .toast { background: var(--surface); border: 1px solid var(--border); padding: 14px 20px; border-radius: var(--radius); color: var(--text-main); font-size: 13px; font-weight: 500; box-shadow: var(--shadow); pointer-events: all; display: flex; align-items: center; gap: 12px; animation: slideInRight 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .toast.success i { color: var(--success); }
+        .toast.error i { color: var(--danger); }
+        .toast.warning i { color: var(--warning); }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+
+        #main-layout { display: none; width: 100%; height: 100dvh; overflow: hidden; }
+        #main-layout[style*="display: flex"] { display: flex !important; }
+
+        .sidebar { width: var(--sidebar-width); background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; flex-shrink: 0; }
+        .brand-container { height: 75px; display: flex; align-items: center; padding: 0 25px; border-bottom: 1px solid var(--border); }
+        .brand { font-size: 20px; font-weight: 800; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
+        .nav-menu { flex: 1; padding: 20px 0; overflow-y: auto; list-style: none; }
+        .nav-item { padding: 12px 25px; display: flex; align-items: center; gap: 15px; color: var(--text-muted); cursor: pointer; transition: 0.3s; font-size: 14px; font-weight: 500; border-right: 3px solid transparent; margin-bottom: 5px; }
+        .nav-item:hover { color: var(--text-main); background: rgba(255,255,255,0.03); }
+        .nav-item.active { color: var(--accent); background: rgba(188, 19, 254, 0.08); border-right-color: var(--accent); }
+
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg-dark); min-width: 0; }
+        .header { height: 75px; padding: 0 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: var(--surface); z-index: 100; flex-shrink: 0; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .page-title-text { font-size: 20px; font-weight: 600; }
+        .badge-dot { position: absolute; top: 4px; right: 4px; background: var(--danger); color: #fff; font-size: 9px; font-weight: bold; width: 16px; height: 16px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid var(--surface); }
+
+        .content { flex: 1; padding: 30px; overflow-y: auto; position: relative; }
+        .section-box { padding: 25px; border-radius: var(--radius); margin-bottom: 25px; }
+        .box-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .stat-card { padding: 20px; border-radius: var(--radius); display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: var(--accent); }
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
+
+        .table-container { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); width: 100%; }
+        .table-header-controls { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.1); }
+        .search-box { position: relative; width: 300px; max-width: 100%; }
+        .search-box input { width: 100%; padding: 10px 15px 10px 40px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 30px; color: var(--text-main); }
+        .search-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+
+        .table-responsive { max-height: 600px; overflow-y: auto; overflow-x: auto; width: 100%; display: block; }
+        table { width: 100%; border-collapse: collapse; min-width: 750px; }
+        th { position: sticky; top: 0; background: var(--surface-light); text-align: left; padding: 15px 20px; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid var(--border); z-index: 10; }
+        td { padding: 15px 20px; font-size: 13px; border-bottom: 1px solid var(--border); color: var(--text-main); }
+
+        .add-panel-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; }
+        .panel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .panel-card { display: flex; flex-direction: column; border-radius: var(--radius); overflow: hidden; transition: all 0.3s ease; }
+        .iframe-container { position: relative; width: 100%; padding-bottom: 56.25%; background: #000; border-bottom: 1px solid var(--border); }
+        .iframe-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .panel-info { padding: 20px; display: flex; flex-direction: column; flex: 1; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 2000; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s ease; }
+        .modal-overlay:not(.hidden) { opacity: 1; visibility: visible; }
+        .modal { background: var(--surface); width: 90%; max-width: 450px; padding: 30px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 20px 50px #000; transform: scale(0.9); transition: 0.3s; max-height: 90vh; overflow-y: auto; }
+        .modal-overlay:not(.hidden) .modal { transform: scale(1); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 999; }
+
+        .plan-select { width: 100%; padding: 8px; background: rgba(0,0,0,0.2); color: var(--text-main); border: 1px solid var(--border); border-radius: 8px; }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid, .add-panel-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .sidebar { position: fixed; height: 100%; transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            #sidebar-toggle { display: block; }
+            .content { padding: 15px; }
+            .header { padding: 0 15px; }
+            .table-header-controls { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .search-box { width: 100%; }
+            .stats-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+            .modal { padding: 20px; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .header-right { gap: 8px; }
+            .page-title-text { font-size: 16px; }
+            .panel-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="loader">
+    <div class="spinner"></div>
+    <div style="margin-top: 20px; color: var(--accent); font-weight: 600; letter-spacing: 2px;">LOADING ADMIN...</div>
+</div>
+
+<div id="toast-container"></div>
+
+<div id="main-layout">
+    <div id="sidebar-overlay" class="sidebar-overlay hidden"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="brand-container">
+            <div class="brand">
+                <img id="admin-brand-logo" src="" style="display:none; width: 32px; height: 32px; border-radius: 8px; object-fit: cover;">
+                <i id="admin-brand-icon" class="fas fa-crown" style="color: var(--accent); font-size: 24px;"></i>
+                <span id="admin-brand-text" class="brand-text" style="background: linear-gradient(90deg, var(--accent), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">KP ADMIN</span>
+            </div>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item active" data-target="dashboard"><i class="fas fa-th-large"></i> Dashboard</li>
+            <li class="nav-item" data-target="add-panel"><i class="fas fa-plus-square"></i> Add Panel</li>
+            <li class="nav-item" data-target="manage-panels"><i class="fas fa-box"></i> Manage Panels</li>
+
+            <li style="margin: 15px 25px 5px; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Finance & Users</li>
+            <li class="nav-item" data-target="gateway"><i class="fas fa-bolt"></i> Gateway Payments</li>
+            <li class="nav-item" data-target="crypto"><i class="fab fa-bitcoin"></i> Crypto Deposits</li>
+            <li class="nav-item" data-target="manual"><i class="fas fa-hand-holding-usd"></i> Manual Deposits</li>
+            <li class="nav-item" data-target="purchases"><i class="fas fa-shopping-cart"></i> Purchases</li>
+            <li class="nav-item" data-target="users"><i class="fas fa-users"></i> Users Control</li>
+
+            <li style="margin: 15px 25px 5px; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Marketing</li>
+            <li class="nav-item" data-target="promotions"><i class="fas fa-bullhorn"></i> Promotions</li>
+            <li class="nav-item" data-target="coupons"><i class="fas fa-ticket-alt"></i> Coupons</li>
+
+            <li style="margin: 15px 25px 5px; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Configuration</li>
+            <li class="nav-item" data-target="settings"><i class="fas fa-qrcode"></i> Payment Settings</li>
+            <li class="nav-item" data-target="contact"><i class="fas fa-headset"></i> Support Links</li>
+            <li class="nav-item" data-target="branding"><i class="fas fa-image"></i> Site Branding</li>
+
+            <li class="nav-item" id="btn-logout" style="color: var(--danger); margin-top: 20px;"><i class="fas fa-sign-out-alt"></i> Logout</li>
+        </ul>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="header glass">
+            <div class="header-left">
+                <button id="sidebar-toggle" class="icon-btn"><i class="fas fa-bars"></i></button>
+                <h2 id="page-title" class="page-title-text">Dashboard</h2>
+            </div>
+            <div class="header-right">
+                <button id="theme-toggle" class="icon-btn" title="Toggle Theme"><i class="fas fa-sun"></i></button>
+                <button class="icon-btn" style="position: relative;" onclick="document.querySelector('.nav-item[data-target=\'manual\']').click()">
+                    <i class="fas fa-bell"></i>
+                    <span id="notif-badge" class="badge-dot" style="display:none;">0</span>
+                </button>
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); display: flex; justify-content: center; align-items: center; color: #fff; font-weight: bold; border: 2px solid var(--surface); cursor: pointer;">AD</div>
+            </div>
+        </header>
+
+        <main class="content">
+            <section class="page-section" id="sec-dashboard">
+                <div class="stats-grid">
+                    <div class="stat-card glass">
+                        <div class="stat-info"><p>Total Revenue</p><h3 id="stat-revenue">₹0.00</h3></div>
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #00ff66, #008f39); padding: 12px; border-radius: 12px; color: white; font-size: 20px;"><i class="fas fa-wallet"></i></div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-info"><p>Total Users</p><h3 id="stat-users">0</h3></div>
+                        <div class="stat-icon" style="background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); padding: 12px; border-radius: 12px; color: white; font-size: 20px;"><i class="fas fa-users"></i></div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-info"><p>Pending Manual</p><h3 id="stat-pending-manual">0</h3></div>
+                        <div class="stat-icon" style="background: linear-gradient(135deg, var(--warning), #d97706); padding: 12px; border-radius: 12px; color: white; font-size: 20px;"><i class="fas fa-hand-holding-usd"></i></div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-info"><p>Pending Gateway</p><h3 id="stat-pending-gateway">0</h3></div>
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #ef4444, #b91c1c); padding: 12px; border-radius: 12px; color: white; font-size: 20px;"><i class="fas fa-bolt"></i></div>
+                    </div>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="section-box glass" style="min-height: 350px; display: flex; flex-direction: column;">
+                        <div class="box-header"><h3>Revenue Overview (Last 7 Days)</h3></div>
+                        <div style="flex: 1; position: relative; width: 100%;"><canvas id="revenueChart"></canvas></div>
+                    </div>
+                    <div class="section-box glass">
+                        <div class="box-header"><h3>Recent Deposits</h3><button class="btn btn-outline btn-sm" onclick="document.querySelector('.nav-item[data-target=\'gateway\']').click()">View All</button></div>
+                        <div id="recent-payments-list"><div style="padding:20px; text-align:center; color:var(--text-muted);">Loading...</div></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page-section hidden" id="sec-add-panel">
+                <div class="add-panel-grid">
+                    <div class="section-box glass">
+                        <div class="box-header"><h3><i class="fas fa-edit" style="color:var(--accent); margin-right:8px;"></i> Panel Details</h3></div>
+                        <div class="form-group"><label>Panel Name</label><input id="add-p-name" class="form-input" placeholder="E.g., VIP Injector v1" type="text"/></div>
+                        <div class="form-group"><label>Logo Image URL</label><input id="add-p-logo" class="form-input" placeholder="https://..." type="url"/></div>
+                        <div class="form-group"><label>Category</label><input id="add-p-category" class="form-input" placeholder="E.g., Free Fire, BGMI" type="text"/></div>
+                        <div class="form-group"><label>YouTube Video Link</label><input id="add-p-yt" class="form-input" placeholder="https://www.youtube.com/watch?v=..." type="url"/></div>
+                        <div class="form-group"><label>Update File Link</label><input id="add-p-link" class="form-input" placeholder="https://t.me/..." type="url"/></div>
+                        <div class="form-group"><label>Feedback Link (Optional)</label><input id="add-p-feedback" class="form-input" placeholder="https://t.me/..." type="url"/></div>
+                        <div class="form-group"><label>Description</label><textarea id="add-p-desc" class="form-input" placeholder="- Aimbot&#10;- Auto Headshot" rows="3"></textarea></div>
+                        <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 20px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+                                <label style="margin:0; color:var(--text-main); font-weight:600;"><i class="fas fa-tags" style="color:var(--accent);"></i> Pricing Plans</label>
+                                <button class="btn btn-outline btn-sm" id="btn-add-plan-row"><i class="fas fa-plus"></i> Add Plan</button>
+                            </div>
+                            <div id="plans-container">
+                                <div class="plan-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                                    <input class="p-label form-input" placeholder="Plan Name" required type="text" style="flex:2;"/>
+                                    <input class="p-price form-input" placeholder="Price (₹)" required type="number"/>
+                                    <input class="p-keys form-input" placeholder="Keys" value="1" type="number"/>
+                                    <button class="btn btn-danger btn-sm" onclick="this.parentElement.remove(); window.updateLivePreview();"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-block" id="btn-submit-panel"><i class="fas fa-cloud-upload-alt"></i> PUBLISH PANEL</button>
+                    </div>
+                    <div>
+                        <div class="box-header"><h3 style="color:var(--text-muted);"><i class="fas fa-eye"></i> Live Preview</h3></div>
+                        <div class="panel-card glass" id="live-preview-card" style="pointer-events: none;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page-section hidden" id="sec-manage-panels">
+                <div class="table-header-controls" style="background:transparent; border:none; padding:0 0 20px 0;">
+                    <h3 style="font-size:16px;"><i class="fas fa-box" style="color:var(--accent); margin-right:8px;"></i> Manage Panels</h3>
+                    <button class="btn btn-outline btn-sm" onclick="loadSection('manage-panels')"><i class="fas fa-sync-alt"></i> Refresh</button>
+                </div>
+                <div class="panel-grid" id="admin-panels-container"></div>
+            </section>
+
+            <section class="page-section hidden" id="sec-promotions">
+                <div class="dashboard-grid">
+                    <div class="section-box glass">
+                        <div class="box-header"><h3><i class="fas fa-bullhorn" style="color:var(--accent); margin-right:8px;"></i> Add Promotion</h3></div>
+                        <div class="form-group"><label>Title (Required)</label><input id="promo-title" class="form-input" placeholder="E.g., Diwali Special Offer" type="text"/></div>
+                        <div class="form-group"><label>Image URL</label><input id="promo-img" class="form-input" placeholder="https://..." type="url"/></div>
+                        <div class="form-group"><label>Redirect Link (Optional)</label><input id="promo-link" class="form-input" placeholder="https://..." type="url"/></div>
+                        <button class="btn btn-primary btn-block" id="btn-add-promo"><i class="fas fa-plus"></i> PUBLISH PROMOTION</button>
+                    </div>
+                    <div class="section-box glass">
+                        <div class="box-header"><h3>Active Promotions</h3><button class="btn btn-outline btn-sm" onclick="loadSection('promotions')"><i class="fas fa-sync-alt"></i></button></div>
+                        <div id="promotions-list" style="display: flex; flex-direction: column; gap: 15px;">
+                            <div style="padding:20px; text-align:center; color:var(--text-muted);">Loading promotions...</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page-section hidden" id="sec-coupons">
+                <div class="dashboard-grid">
+                    <div class="section-box glass">
+                        <div class="box-header"><h3><i class="fas fa-ticket-alt" style="color:var(--accent); margin-right:8px;"></i> Add Coupon Code</h3></div>
+                        <div class="form-group"><label>Coupon Code</label><input id="coupon-code" class="form-input" style="text-transform: uppercase;" type="text"/></div>
+                        <div class="form-group"><label>Discount (%)</label><input id="coupon-discount" class="form-input" type="number" min="1" max="100"/></div>
+                        <div class="form-group"><label>Max Usage</label><input id="coupon-max" class="form-input" placeholder="Empty for unlimited" type="number"/></div>
+                        <button class="btn btn-primary btn-block" id="btn-add-coupon"><i class="fas fa-plus"></i> CREATE COUPON</button>
+                    </div>
+                    <div class="table-container" style="align-self: start;">
+                        <div class="table-header-controls">
+                            <h3 style="font-size:16px;">Managed Coupons</h3>
+                            <button class="btn btn-outline btn-sm" onclick="loadSection('coupons')"><i class="fas fa-sync-alt"></i></button>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>Code</th><th>Discount</th><th>Usage</th><th>Status</th><th>Action</th></tr></thead>
+                                <tbody id="coupons-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page-section hidden" id="sec-settings">
+                <div class="dashboard-grid">
+                    <div class="section-box glass">
+                        <div class="box-header"><h3><i class="fas fa-bolt" style="color:var(--danger); margin-right:8px;"></i> Gateway & UPI Settings</h3></div>
+                        <div class="form-group">
+                            <label>ZapUPI API Key <span style="color:var(--warning); font-size:11px;">(Required for auto-verification)</span></label>
+                            <input id="set-zap-key" class="form-input" type="text" placeholder="Enter your ZapUPI Key"/>
+                        </div>
+                        <div style="border-top: 1px dashed var(--border); margin: 25px 0;"></div>
+                        <div class="form-group"><label>Manual Deposit UPI ID <span style="color:var(--text-muted); font-size:11px;">(Required)</span></label><input id="set-upi" class="form-input" type="text" placeholder="yourname@upi"/></div>
+                        <div class="form-group"><label>Manual Deposit QR Code URL <span style="color:var(--text-muted); font-size:11px;">(Optional)</span></label><input id="set-qr" class="form-input" type="url" placeholder="https://..."/></div>
+                        <div id="qr-preview" style="margin-bottom: 20px; text-align: center;"></div>
+                    </div>
+                    <div class="section-box glass">
+                        <div class="box-header"><h3><i class="fab fa-bitcoin" style="color:var(--neon-crypto); margin-right:8px;"></i> Crypto Settings</h3></div>
+                        <div class="form-group"><label>Binance Pay ID</label><input id="set-crypto-payid" class="form-input" type="text" placeholder="e.g., 123456789"/></div>
+                        <div class="form-group"><label>USDT Address (TRC20)</label><input id="set-crypto-address" class="form-input" type="text" placeholder="T..."/></div>
+                        <div class="form-group"><label>Crypto Rate (1 USDT = ₹)</label><input id="set-crypto-rate" class="form-input" type="number" placeholder="88.00"/></div>
+                        <div class="form-group"><label>Crypto QR Code URL</label><input id="set-crypto-qr" class="form-input" type="url" placeholder="https://..."/></div>
+                        <div id="crypto-qr-preview" style="margin-bottom: 20px; text-align: center;"></div>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block" id="btn-save-settings" style="height: 55px; font-size: 15px; max-width: 600px; margin: 0 auto; display: block;"><i class="fas fa-save"></i> SAVE ALL DEPOSIT SETTINGS</button>
+            </section>
+
+            <section class="page-section hidden" id="sec-contact">
+                <div class="section-box glass" style="max-width: 600px; margin: 0 auto;">
+                    <div class="box-header"><h3><i class="fas fa-headset" style="color:var(--accent); margin-right:8px;"></i> Dynamic Support Links</h3></div>
+                    <div class="form-group"><label>WhatsApp Link</label><input id="set-wa" class="form-input" placeholder="https://wa.me/..." type="url"/></div>
+                    <div class="form-group"><label>Telegram Link (Login Page Button)</label><input id="set-tg-login" class="form-input" placeholder="https://t.me/your_login_channel" type="url"/></div>
+                    <div class="form-group"><label>Telegram Link (Dashboard Floating Button)</label><input id="set-tg-dash" class="form-input" placeholder="https://t.me/your_dashboard_support" type="url"/></div>
+                    <button class="btn btn-primary btn-block" id="btn-save-contact"><i class="fas fa-save"></i> UPDATE SUPPORT LINKS</button>
+                </div>
+            </section>
+
+            <section class="page-section hidden" id="sec-branding">
+                <div class="section-box glass" style="max-width: 600px; margin: 0 auto;">
+                    <div class="box-header"><h3><i class="fas fa-image" style="color:var(--accent); margin-right:8px;"></i> Site Branding</h3></div>
+                    <div class="form-group"><label>Site Name</label><input id="brand-name" class="form-input" type="text"/></div>
+                    <div class="form-group"><label>Logo Image URL</label><input id="brand-logo" class="form-input" type="url"/></div>
+                    <button class="btn btn-primary btn-block" id="btn-save-branding"><i class="fas fa-save"></i> UPDATE BRANDING</button>
+                </div>
+            </section>
+
+            <section class="page-section hidden" id="sec-gateway">
+                <div class="table-container">
+                    <div class="table-header-controls">
+                        <h3 style="font-size:16px;"><i class="fas fa-bolt" style="color:var(--danger); margin-right:8px;"></i> ZapUPI Gateway Payments</h3>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <button class="btn btn-outline btn-sm" onclick="loadSection('gateway')"><i class="fas fa-sync-alt"></i> Refresh</button>
+                            <div class="search-box"><i class="fas fa-search"></i><input type="text" id="search-gateway-input" placeholder="Search by email, phone, or Order ID..."></div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Date</th><th>User Info</th><th>Amount</th><th>Order ID / UTR</th><th>Status</th><th>Action</th></tr></thead>
+                            <tbody id="gateway-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page-section hidden" id="sec-crypto">
+                <div class="table-container">
+                    <div class="table-header-controls">
+                        <h3 style="font-size:16px;"><i class="fab fa-bitcoin" style="color:var(--neon-crypto); margin-right:8px;"></i> Crypto Deposits</h3>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <button class="btn btn-outline btn-sm" onclick="loadSection('crypto')"><i class="fas fa-sync-alt"></i> Refresh</button>
+                            <div class="search-box"><i class="fas fa-search"></i><input type="text" id="search-crypto-input" placeholder="Search by email or Hash..."></div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Date</th><th>User Info</th><th>Amount</th><th>Hash & Note</th><th>Status</th><th>Action</th></tr></thead>
+                            <tbody id="crypto-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page-section hidden" id="sec-manual">
+                <div class="table-container">
+                    <div class="table-header-controls">
+                        <h3 style="font-size:16px;"><i class="fas fa-hand-holding-usd" style="color:var(--success); margin-right:8px;"></i> Manual Deposits</h3>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <button class="btn btn-outline btn-sm" onclick="loadSection('manual')"><i class="fas fa-sync-alt"></i> Refresh</button>
+                            <div class="search-box"><i class="fas fa-search"></i><input type="text" id="search-manual-input" placeholder="Search by email, app, or UTR..."></div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Date</th><th>User Info</th><th>Amount</th><th>App & UTR</th><th>Status</th><th>Action</th></tr></thead>
+                            <tbody id="manual-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page-section hidden" id="sec-users">
+                <div class="table-container">
+                    <div class="table-header-controls">
+                        <h3 style="font-size:16px;">User Management</h3>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <button class="btn btn-outline btn-sm" onclick="loadSection('users')"><i class="fas fa-sync-alt"></i> Refresh</button>
+                            <div class="search-box"><i class="fas fa-search"></i><input type="text" id="search-users-input" placeholder="Search by email or UID..."></div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Joined Date</th><th>User Info</th><th>Balance</th><th>Status</th><th>Action</th></tr></thead>
+                            <tbody id="users-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page-section hidden" id="sec-purchases">
+                <div class="table-container">
+                    <div class="table-header-controls">
+                        <h3 style="font-size:16px;">Purchase History</h3>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <button class="btn btn-outline btn-sm" onclick="loadSection('purchases')"><i class="fas fa-sync-alt"></i> Refresh</button>
+                            <div class="search-box"><i class="fas fa-search"></i><input type="text" id="search-purchases-input" placeholder="Search by email, panel or key..."></div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Date</th><th>User Email</th><th>Panel & Plan</th><th>Delivered Key</th></tr></thead>
+                            <tbody id="purchases-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<div class="modal-overlay hidden" id="modal-balance">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 style="color:var(--text-main); font-size:18px;">Edit User Balance</h3>
+            <button class="modal-close icon-btn" onclick="closeModal('modal-balance')"><i class="fas fa-times"></i></button>
+        </div>
+        <input id="edit-bal-uid" type="hidden"/>
+        <div class="form-group"><label>Current (₹)</label><input disabled id="edit-bal-current" class="form-input" style="color:var(--success); font-weight: bold;" type="text"/></div>
+        <div class="form-group">
+            <label>Action</label>
+            <select id="edit-bal-type" class="form-input" style="appearance: none;">
+                <option value="add">Add Funds (+)</option>
+                <option value="deduct">Deduct Funds (-)</option>
+                <option value="set">Set Exact Balance (=)</option>
+            </select>
+        </div>
+        <div class="form-group"><label>Amount (₹)</label><input id="edit-bal-amount" class="form-input" type="number"/></div>
+        <button class="btn btn-primary btn-block" id="btn-save-balance" style="height: 50px;">Confirm Update</button>
+    </div>
+</div>
+
+<div class="modal-overlay hidden" id="modal-edit-panel">
+    <div class="modal" style="max-width: 600px;">
+        <div class="modal-header">
+            <h3 style="color:var(--text-main); font-size:18px;">Edit Panel Info</h3>
+            <button class="modal-close icon-btn" onclick="closeModal('modal-edit-panel')"><i class="fas fa-times"></i></button>
+        </div>
+        <input id="edit-p-id" type="hidden"/>
+        <div class="form-group"><label>Panel Name</label><input id="edit-p-name" class="form-input" type="text"/></div>
+        <div class="form-group"><label>Logo Image URL</label><input id="edit-p-logo" class="form-input" type="url"/></div>
+        <div class="form-group"><label>Category</label><input id="edit-p-category" class="form-input" type="text"/></div>
+        <div class="form-group"><label>YouTube Link</label><input id="edit-p-yt" class="form-input" type="url"/></div>
+        <div class="form-group"><label>Download / Update Link</label><input id="edit-p-link" class="form-input" type="url"/></div>
+        <div class="form-group"><label>Feedback / Telegram Link</label><input id="edit-p-feedback" class="form-input" type="url"/></div>
+        <div class="form-group"><label>Description & Features</label><textarea id="edit-p-desc" class="form-input" rows="4"></textarea></div>
+        <div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 25px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+                <label style="margin:0; color:var(--text-main); font-weight:700;"><i class="fas fa-tags" style="color:var(--accent);"></i> Pricing Plans</label>
+                <button class="btn btn-outline btn-sm" onclick="window.addEditPlanRow()"><i class="fas fa-plus"></i> Add Plan</button>
+            </div>
+            <div id="edit-plans-container" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        </div>
+        <button class="btn btn-primary btn-block" id="btn-save-edit-panel" style="height: 50px;">Save Changes</button>
+    </div>
+</div>
+
+<div class="modal-overlay hidden" id="modal-image">
+    <div class="modal" style="max-width: 500px; padding: 20px;">
+        <div class="modal-header" style="margin-bottom: 15px;">
+            <h3 style="color:var(--text-main); font-size:16px;">Payment Screenshot</h3>
+            <button class="modal-close icon-btn" onclick="closeModal('modal-image')"><i class="fas fa-times"></i></button>
+        </div>
+        <img id="preview-image" src="" style="width:100%; border-radius:12px; border: 1px solid var(--border); max-height: 60vh; object-fit: contain; background: #000;">
+        <a id="preview-link" href="#" target="_blank" class="btn btn-outline btn-block" style="margin-top: 15px; height: 45px;"><i class="fas fa-external-link-alt"></i> Open Original</a>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, get, set, update, remove, onValue, push, runTransaction, serverTimestamp, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAjYC4ztgPbVyjHQ3uXjYrPcyFStZQ-2_o",
+        authDomain: "kp-panel-77a17.firebaseapp.com",
+        databaseURL: "https://kp-panel-77a17-default-rtdb.firebaseio.com",
+        projectId: "kp-panel-77a17",
+        storageBucket: "kp-panel-77a17.firebasestorage.app",
+        messagingSenderId: "372669101535",
+        appId: "1:372669101535:web:d435dd4a5ea51ada46806a",
+        measurementId: "G-241RGNKTQK"
+    };
+
+    const ALLOWED_ADMINS = ["blackarmyff452@gmail.com"];
+
+    let app, auth, db;
+    try {
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getDatabase(app);
+    } catch (e) { console.error("Firebase Init Error:", e); }
+
+    const loader = document.getElementById('loader');
+    let usersDataCache = {};
+    let panelsDataCache = {};
+    let revChart = null;
+    window.ZAP_KEY = "";
+
+    window.showLoader = () => { loader.style.display = 'flex'; };
+    window.hideLoader = () => { loader.style.display = 'none'; };
+
+    window.showToast = (msg, type = 'success') => {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        let icon = type === 'error' ? 'fa-exclamation-circle' : (type === 'warning' ? 'fa-exclamation-triangle' : 'fa-check-circle');
+        toast.innerHTML = `<i class="fas ${icon}"></i> <span>${msg}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => { toast.style.animation = 'slideOutRight 0.3s forwards'; setTimeout(() => toast.remove(), 300); }, 3000);
+    };
+
+    window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
+    window.openModal = (id) => document.getElementById(id).classList.remove('hidden');
+    window.openImageModal = (url) => {
+        document.getElementById('preview-image').src = url;
+        document.getElementById('preview-link').href = url;
+        openModal('modal-image');
+    };
+
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => { if(e.target === overlay) overlay.classList.add('hidden'); });
+    });
+
+    const themeToggle = document.getElementById('theme-toggle');
+    if((localStorage.getItem('adminTheme') || 'dark') === 'light') { document.body.classList.add('light-theme'); themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; }
+    themeToggle.onclick = () => {
+        document.body.classList.toggle('light-theme');
+        const isLight = document.body.classList.contains('light-theme');
+        localStorage.setItem('adminTheme', isLight ? 'light' : 'dark');
+        themeToggle.innerHTML = isLight ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+        hideLoader();
+        if (!user) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            const snap = await get(ref(db, `users/${user.uid}`));
+            const role = snap.exists() ? (snap.val().role || 'user') : 'user';
+
+            if (role !== 'admin' && !ALLOWED_ADMINS.includes(user.email)) {
+                window.location.href = 'user-panel.html';
+                return;
+            }
+
+            document.getElementById('main-layout').style.display = 'flex';
+            initBranding();
+
+            get(ref(db, 'users')).then(s => { usersDataCache = s.val() || {}; });
+            get(ref(db, 'settings/payment')).then(s => {
+                if(s.exists() && s.val().zap_key) window.ZAP_KEY = s.val().zap_key;
+                else get(ref(db, 'deposit_settings')).then(d => { if(d.exists()) window.ZAP_KEY = d.val().zap_key || ''; });
+            });
+
+            document.querySelector('.nav-item[data-target="dashboard"]').click();
+        } catch (e) {
+            console.error(e);
+            window.location.href = 'index.html';
+        }
+    });
+
+    document.getElementById('btn-logout').onclick = async () => {
+        showLoader();
+        await signOut(auth);
+        window.location.href = 'index.html';
+    };
+
+    window.loadSection = (target) => {
+        showLoader();
+        setTimeout(async () => {
+            try {
+                switch(target) {
+                    case 'dashboard': await initDashboardStats(); break;
+                    case 'users': await initUsersTable(); break;
+                    case 'gateway': await initGatewayTable(); break;
+                    case 'manual': await initManualTable(); break;
+                    case 'crypto': await initCryptoTable(); break;
+                    case 'purchases': await initPurchasesTable(); break;
+                    case 'manage-panels': await initPanelsTable(); break;
+                    case 'promotions': await initPromotionsTable(); break;
+                    case 'coupons': await initCouponsTable(); break;
+                    case 'settings': case 'contact': case 'branding': await initSettings(); break;
+                }
+            } catch(e) { console.error(e); showToast("Error loading data", "error"); }
+            hideLoader();
+        }, 50);
+    };
+
+    document.querySelectorAll('.nav-item[data-target]').forEach(item => {
+        item.addEventListener('click', () => {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            item.classList.add('active');
+            const target = item.getAttribute('data-target');
+            document.getElementById('page-title').innerText = item.innerText;
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(`sec-${target}`).classList.remove('hidden');
+
+            if(window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebar-overlay').classList.add('hidden');
+            }
+            window.loadSection(target);
+        });
+    });
+
+    document.getElementById('sidebar-toggle').onclick = () => {
+        document.getElementById('sidebar').classList.add('open');
+        document.getElementById('sidebar-overlay').classList.remove('hidden');
+    };
+    document.getElementById('sidebar-overlay').onclick = () => {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebar-overlay').classList.add('hidden');
+    };
+
+    function extractYTId(url) {
+        if(!url) return null;
+        if(url.length === 11 && !url.includes('/')) return url;
+        const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/);
+        return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    window.animateCounter = (id, start, end, duration, isCurrency = false) => {
+        let obj = document.getElementById(id);
+        if (!obj || start === end) { if(obj) obj.innerHTML = isCurrency ? '₹' + end.toFixed(2) : end; return; }
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            let val = progress * (end - start) + start;
+            obj.innerHTML = isCurrency ? '₹' + val.toFixed(2) : Math.floor(val);
+            if (progress < 1) window.requestAnimationFrame(step);
+            else obj.innerHTML = isCurrency ? '₹' + end.toFixed(2) : end;
+        };
+        window.requestAnimationFrame(step);
+    };
+
+    ['users', 'gateway', 'manual', 'crypto', 'purchases'].forEach(type => {
+        document.getElementById(`search-${type}-input`)?.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            document.querySelectorAll(`#${type}-tbody tr`).forEach(row => {
+                row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none';
+            });
+        });
+    });
+
+    let dashListenersSetup = false;
+    async function initDashboardStats() {
+        if(!dashListenersSetup) {
+            dashListenersSetup = true;
+            const listenPending = (path, elementId) => {
+                onValue(ref(db, path), snap => {
+                    let pending = 0;
+                    snap.forEach(child => { if(child.val().status === 'pending') pending++; });
+                    document.getElementById(elementId).innerText = pending;
+                    updateTotalPendingBadge();
+                });
+            };
+            listenPending('gateway_payments', 'stat-pending-gateway');
+            listenPending('manual_deposits', 'stat-pending-manual');
+
+            onValue(ref(db, 'users'), snap => {
+                const val = snap.val() || {};
+                document.getElementById('stat-users').innerText = Object.keys(val).length;
+            });
+        }
+
+        const [gSnap, mSnap, cSnap] = await Promise.all([
+            get(ref(db, 'gateway_payments')),
+            get(ref(db, 'manual_deposits')),
+            get(ref(db, 'crypto_deposits'))
+        ]);
+
+        let gList = [], mList = [], cList = [];
+        gSnap.forEach(c => { let v = c.val(); v.id = c.key; gList.push(v); });
+        mSnap.forEach(c => { let v = c.val(); v.id = c.key; mList.push(v); });
+        cSnap.forEach(c => { let v = c.val(); v.id = c.key; cList.push(v); });
+
+        updateDashboardStats(gList, mList, cList);
+    }
+
+    function updateTotalPendingBadge() {
+        let g = parseInt(document.getElementById('stat-pending-gateway').innerText)||0;
+        let m = parseInt(document.getElementById('stat-pending-manual').innerText)||0;
+        let tot = g + m;
+        const badge = document.getElementById('notif-badge');
+        if(tot > 0) { badge.innerText = tot; badge.style.display = 'flex'; } else { badge.style.display = 'none'; }
+    }
+
+    function updateDashboardStats(gList, mList, cList) {
+        let revenue = 0;
+        const allDeposits = [...gList, ...mList, ...cList].sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
+        allDeposits.forEach(p => { if (p.status === 'approved') revenue += parseFloat(p.amount); });
+        animateCounter('stat-revenue', parseFloat((document.getElementById('stat-revenue').innerText || '0').replace('₹','')) || 0, revenue, 1000, true);
+        renderRecentPayments(allDeposits.slice(0, 5));
+        updateChart(allDeposits);
+    }
+
+    async function updateChart(allDeposits) {
+        if (!window.Chart) {
+            await new Promise((resolve) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+                script.onload = resolve;
+                document.head.appendChild(script);
+            });
+        }
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+        const last7Days = [...Array(7)].map((_, i) => {
+            const d = new Date(); d.setDate(d.getDate() - i); return d.toLocaleDateString();
+        }).reverse();
+        const revData = {}; last7Days.forEach(d => revData[d] = 0);
+        allDeposits.forEach(p => {
+            if(p.status === 'approved' && p.timestamp) {
+                const d = new Date(p.timestamp).toLocaleDateString();
+                if(revData[d] !== undefined) revData[d] += parseFloat(p.amount);
+            }
+        });
+        const data = Object.values(revData);
+        if(revChart) { revChart.data.datasets[0].data = data; revChart.update(); return; }
+        Chart.defaults.color = '#888888'; Chart.defaults.font.family = "'Poppins', sans-serif";
+        revChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: last7Days,
+                datasets: [{
+                    label: 'Revenue (₹)', data: data, borderColor: '#bc13fe', backgroundColor: 'rgba(188, 19, 254, 0.1)',
+                    borderWidth: 2, fill: true, tension: 0.4, pointBackgroundColor: '#00f0ff', pointBorderColor: '#111',
+                    pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(17,17,17,0.9)', titleColor: '#fff', bodyColor: '#00ff66', displayColors: false, callbacks: { label: (ctx) => '₹ ' + ctx.parsed.y } } },
+                scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' } }, y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: (val) => '₹' + val } } }
+            }
+        });
+    }
+
+    async function initUsersTable() {
+        const snap = await get(ref(db, 'users'));
+        usersDataCache = snap.val() || {};
+        renderUsersTable(usersDataCache);
+    }
+
+    async function initGatewayTable() {
+        const snap = await get(ref(db, 'gateway_payments'));
+        const list = [];
+        snap.forEach(child => list.push({ id: child.key, ...child.val() }));
+        list.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
+        renderGatewayTable(list);
+    }
+
+    async function initManualTable() {
+        const snap = await get(ref(db, 'manual_deposits'));
+        const list = [];
+        snap.forEach(child => list.push({ id: child.key, ...child.val() }));
+        list.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
+        renderManualTable(list);
+    }
+
+    async function initCryptoTable() {
+        const snap = await get(ref(db, 'crypto_deposits'));
+        const list = [];
+        snap.forEach(child => list.push({ id: child.key, ...child.val() }));
+        list.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
+        renderCryptoTable(list);
+    }
+
+    async function initPurchasesTable() {
+        const snap = await get(ref(db, 'purchases'));
+        const allPurchases = snap.val() || {};
+        let list = [];
+        for(let uid in allPurchases) {
+            let userData = allPurchases[uid];
+            if (userData.panelId || userData.plan) {
+                let item = userData; item.uid = uid; item.pushId = uid; list.push(item);
+            } else {
+                for(let pushId in userData) {
+                    let item = userData[pushId];
+                    if(typeof item === 'object') { item.uid = uid; item.pushId = pushId; list.push(item); }
+                }
+            }
+        }
+        list.sort((a,b) => new Date(b.date) - new Date(a.date));
+        renderPurchasesTable(list);
+    }
+
+    async function initPanelsTable() {
+        const snap = await get(ref(db, 'panels'));
+        panelsDataCache = snap.val() || {};
+        renderPanels(panelsDataCache);
+    }
+
+    async function initPromotionsTable() {
+        const snap = await get(ref(db, 'promotions'));
+        renderPromotions(snap.val() || {});
+    }
+
+    async function initCouponsTable() {
+        const snap = await get(ref(db, 'coupons'));
+        const coupons = [];
+        snap.forEach(child => coupons.push({ id: child.key, ...child.val() }));
+        renderCoupons(coupons);
+    }
+
+    async function initSettings() {
+        const [paySnap, depSnap, supSnap, brandSnap] = await Promise.all([
+            get(ref(db, 'settings/payment')),
+            get(ref(db, 'deposit_settings')),
+            get(ref(db, 'support_links')),
+            get(ref(db, 'settings/branding'))
+        ]);
+        const payData = paySnap.val() || {};
+        const depData = depSnap.val() || {};
+
+        const zapKey = payData.zap_key || depData.zap_key || '';
+        const upiId = payData.upiId || depData.upi_id || '';
+        const upiQr = payData.qrImage || depData.upi_qr || '';
+
+        window.ZAP_KEY = zapKey;
+        document.getElementById('set-zap-key').value = zapKey;
+        document.getElementById('set-upi').value = upiId;
+        document.getElementById('set-qr').value = upiQr;
+        document.getElementById('qr-preview').innerHTML = upiQr ? `<img src="${upiQr}" style="max-width:180px; border-radius:12px; border:1px solid var(--border); margin-top:10px;">` : '';
+
+        document.getElementById('set-crypto-payid').value = depData.binance_pay_id || '';
+        document.getElementById('set-crypto-address').value = depData.usdt_address || '';
+        document.getElementById('set-crypto-rate').value = depData.crypto_rate || '';
+        document.getElementById('set-crypto-qr').value = depData.crypto_qr || '';
+        document.getElementById('crypto-qr-preview').innerHTML = depData.crypto_qr ? `<img src="${depData.crypto_qr}" style="max-width:180px; border-radius:12px; border:1px solid var(--border); margin-top:10px;">` : '';
+
+        const supData = supSnap.val();
+        if(supData) {
+            document.getElementById('set-wa').value = supData.whatsapp || '';
+            document.getElementById('set-tg-login').value = supData.telegram_login || '';
+            document.getElementById('set-tg-dash').value = supData.telegram_dashboard || '';
+        }
+
+        const brandData = brandSnap.val();
+        if(brandData) {
+            document.getElementById('brand-name').value = brandData.name || '';
+            document.getElementById('brand-logo').value = brandData.logo || '';
+        }
+    }
+
+    function initBranding(){
+        get(ref(db, 'settings/branding')).then(snap => {
+            const data = snap.val();
+            if(!data) { document.getElementById('admin-brand-text').innerText = "KP ADMIN"; return; }
+            if(data.name) document.getElementById('admin-brand-text').innerText = data.name.toUpperCase();
+            if(data.logo && data.logo.length > 5){
+                const logoImg = document.getElementById('admin-brand-logo'); const icon = document.getElementById('admin-brand-icon');
+                logoImg.src = data.logo; logoImg.style.display = 'inline-block'; icon.style.display = 'none';
+            }
+        });
+    }
+
+    window.updateLivePreview = () => {
+        const name = document.getElementById('add-p-name').value || 'Panel Name';
+        const logo = document.getElementById('add-p-logo').value || '';
+        const category = document.getElementById('add-p-category').value || 'Category';
+        const ytId = extractYTId(document.getElementById('add-p-yt').value) || 'dQw4w9WgXcQ';
+        const descText = document.getElementById('add-p-desc').value || 'Premium injection tool';
+        let featuresArr = descText.split(/\n|-/).filter(f => f.trim().length > 0);
+        let featuresHtml = featuresArr.map(f => `<span style="background:rgba(0,240,255,0.05); border:1px solid rgba(0,240,255,0.2); color:#00f0ff; padding:4px 8px; border-radius:6px; font-size:10px; margin-right:4px;">${f.trim()}</span>`).join('');
+        let planHtml = '';
+        document.querySelectorAll('#plans-container .plan-row').forEach(row => {
+            const lbl = row.querySelector('.p-label').value || 'Plan Name'; const p = row.querySelector('.p-price').value || '0';
+            if(lbl && p) planHtml += `<option>${lbl} - ₹${p}</option>`;
+        });
+        if(planHtml) planHtml = `<select class="plan-select">${planHtml}</select>`;
+        let logoHtml = logo ? `<img src="${logo}" style="width:40px; height:40px; border-radius:8px; object-fit:cover; margin-right:10px;">` : '';
+        document.getElementById('live-preview-card').innerHTML = `
+            <div class="iframe-container"><iframe src="https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1" allowfullscreen></iframe></div>
+            <div class="panel-info">
+                <div style="display:flex; align-items:center; margin-bottom:15px;">
+                    ${logoHtml}
+                    <div style="flex:1;">
+                        <div style="margin-bottom:0; font-weight:bold; font-size:16px;">${name}</div>
+                        <span style="font-size:11px; color:var(--accent); text-transform:uppercase; font-weight:600;">${category}</span>
+                    </div>
+                    <span class="badge badge-active">Live</span>
+                </div>
+                <div style="margin-bottom:10px;">${featuresHtml}</div>
+                <div style="margin: 10px 0 15px;">${planHtml || '<span style="color:var(--danger); font-size:11px;">No plans</span>'}</div>
+                <button class="btn btn-primary btn-block" disabled>PURCHASE KEY</button>
+            </div>`;
+    };
+
+    ['add-p-name', 'add-p-logo', 'add-p-category', 'add-p-yt', 'add-p-desc'].forEach(id => document.getElementById(id)?.addEventListener('input', updateLivePreview));
+    document.getElementById('plans-container').addEventListener('input', (e) => { if(e.target.tagName === 'INPUT') updateLivePreview(); });
+    updateLivePreview();
+
+    document.getElementById('btn-add-plan-row').onclick = () => {
+        const container = document.getElementById('plans-container');
+        const row = document.createElement('div'); row.className = 'plan-row';
+        row.innerHTML = `<div style="display: flex; gap: 10px; margin-bottom: 10px;"><input class="p-label form-input" placeholder="Plan Name" required type="text" style="flex:2;"/><input class="p-price form-input" placeholder="Price (₹)" required type="number"/><input class="p-keys form-input" placeholder="Stock" value="1" type="number"/><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove(); window.updateLivePreview();"><i class="fas fa-trash"></i></button></div>`;
+        container.appendChild(row);
+    };
+
+    document.getElementById('btn-submit-panel').onclick = async () => {
+        const name = document.getElementById('add-p-name').value.trim();
+        const logo = document.getElementById('add-p-logo').value.trim();
+        const category = document.getElementById('add-p-category').value.trim();
+        const ytLink = document.getElementById('add-p-yt').value.trim();
+        const link = document.getElementById('add-p-link').value.trim();
+        const feedback = document.getElementById('add-p-feedback').value.trim();
+        const desc = document.getElementById('add-p-desc').value.trim();
+        if(!name || !ytLink || !link) return showToast("Name, YouTube, and Link are required", "error");
+        const ytId = extractYTId(ytLink); if(!ytId) return showToast("Invalid YouTube URL", "error");
+        const plansData = {}; let hasValidPlan = false;
+        document.querySelectorAll('#plans-container .plan-row').forEach((row, index) => {
+            const lbl = row.querySelector('.p-label').value.trim();
+            const p = parseFloat(row.querySelector('.p-price').value);
+            const k = parseInt(row.querySelector('.p-keys').value) || 1;
+            if(lbl && p >= 0) { plansData[`plan_${index}`] = { label: lbl, name: lbl, price: p, keys: k }; hasValidPlan = true; }
+        });
+        if(!hasValidPlan) return showToast("Add at least one valid plan", "error");
+        showLoader();
+        try {
+            await push(ref(db, 'panels'), { name, logo, category, youtube: ytId, link, feedback, description: desc, status: "active", plans: plansData });
+            showToast("Panel added successfully!");
+            ['add-p-name', 'add-p-logo', 'add-p-category', 'add-p-yt', 'add-p-link', 'add-p-feedback', 'add-p-desc'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('plans-container').innerHTML = `<div class="plan-row" style="display: flex; gap: 10px; margin-bottom: 10px;"><input class="p-label form-input" placeholder="Plan Name" required type="text" style="flex:2;"/><input class="p-price form-input" placeholder="Price (₹)" required type="number"/><input class="p-keys form-input" placeholder="Stock" value="1" type="number"/><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove(); window.updateLivePreview();"><i class="fas fa-trash"></i></button></div>`;
+            document.querySelector('.nav-item[data-target="manage-panels"]').click();
+        } catch(e) { showToast("Database Error", "error"); }
+        hideLoader();
+    };
+
+    function renderPanels(panels) {
+        const container = document.getElementById('admin-panels-container');
+        let html = '';
+        for(let key in panels) {
+            const p = panels[key]; const isActive = p.status === 'active';
+            let planHtml = '';
+            if(p.plans && Object.keys(p.plans).length > 0) {
+                const sortedPlans = Object.entries(p.plans).sort((a,b) => (a[1]?.price||0) - (b[1]?.price||0));
+                planHtml = `<select class="plan-select">`;
+                sortedPlans.forEach(([pk, pd]) => {
+                    let labelText = pd.label || pd.name || `${pd.days || ''} Days`;
+                    planHtml += `<option>${labelText} - ₹${pd.price}</option>`;
+                });
+                planHtml += `</select>`;
+            } else planHtml = `<p style="color:var(--danger); font-size:13px; text-align:center;">Pricing unavailable</p>`;
+            let descText = p.description || 'Premium injection tool';
+            let logoHtml = p.logo ? `<img src="${p.logo}" style="width:40px; height:40px; border-radius:8px; object-fit:cover; margin-right:10px;">` : '';
+            const feedbackStatus = p.feedback ? `<a href="${p.feedback}" target="_blank" style="color:var(--accent-secondary);">View Feedback</a>` : `<span style="color:var(--danger)">Hidden</span>`;
+            html += `
+                <div class="panel-card glass">
+                    <div class="iframe-container"><iframe src="https://www.youtube.com/embed/${p.youtube}?rel=0&modestbranding=1" allowfullscreen></iframe></div>
+                    <div class="panel-info">
+                        <div style="display:flex; align-items:center; margin-bottom:15px;">
+                            ${logoHtml}
+                            <div style="flex:1;">
+                                <div style="margin-bottom:0; font-weight:bold; font-size:16px;">${p.name}</div>
+                                <span style="font-size:11px; color:var(--accent); text-transform:uppercase; font-weight:600;">${p.category || 'Category'}</span>
+                            </div>
+                            <span class="badge ${isActive ? 'badge-success' : 'badge-danger'}">${p.status}</span>
+                        </div>
+                        <div style="font-size:12px; color:var(--text-muted); background:rgba(0,0,0,0.2); padding:12px; border-radius:12px; border:1px solid var(--border);">
+                            <div><i class="fas fa-link"></i> File: <a href="${p.link}" target="_blank" style="color:var(--accent-secondary);">Check Link</a></div>
+                            <div style="margin-top:5px;"><i class="fas fa-comment"></i> Feed: ${feedbackStatus}</div>
+                        </div>
+                        <div style="margin: 15px 0;">${planHtml}</div>
+                        <div style="display:flex; gap:10px; margin-top:auto; padding-top:15px; border-top:1px solid var(--border);">
+                            <button class="btn btn-outline btn-sm" style="flex:1" onclick="togglePanelStatus('${key}', '${p.status}')"><i class="fas ${isActive ? 'fa-eye-slash' : 'fa-eye'}"></i> ${isActive ? 'Disable' : 'Enable'}</button>
+                            <button class="btn btn-primary btn-sm" onclick="openEditPanel('${key}')" title="Edit"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger btn-sm" onclick="deletePanel('${key}')" title="Delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>`;
+        }
+        container.innerHTML = html || '<div style="padding:20px; text-align:center; color:var(--text-muted); width:100%;">No panels found.</div>';
+    }
+
+    window.togglePanelStatus = async (id, currentStatus) => { showLoader(); await update(ref(db, `panels/${id}`), { status: currentStatus === 'active' ? 'inactive' : 'active' }); window.loadSection('manage-panels'); };
+    window.deletePanel = async (id) => { if(confirm("Delete this panel?")) { showLoader(); await remove(ref(db, `panels/${id}`)); showToast("Panel deleted"); window.loadSection('manage-panels'); } };
+
+    window.openEditPanel = (id) => {
+        const p = panelsDataCache[id]; if (!p) return;
+        document.getElementById('edit-p-id').value = id;
+        document.getElementById('edit-p-name').value = p.name || '';
+        document.getElementById('edit-p-logo').value = p.logo || '';
+        document.getElementById('edit-p-category').value = p.category || '';
+        document.getElementById('edit-p-yt').value = p.youtube ? `https://youtube.com/watch?v=${p.youtube}` : '';
+        document.getElementById('edit-p-link').value = p.link || '';
+        document.getElementById('edit-p-feedback').value = p.feedback || '';
+        document.getElementById('edit-p-desc').value = p.description || '';
+        const plansContainer = document.getElementById('edit-plans-container');
+        let html = '';
+        if(p.plans) {
+            Object.values(p.plans).forEach(plan => {
+                html += `<div class="edit-plan-row" style="display: flex; gap: 10px; margin-bottom: 10px;"><input class="p-label form-input" placeholder="Plan Name" value="${plan.label || plan.name || ''}" required type="text" style="flex:2;"/><input class="p-price form-input" placeholder="Price (₹)" value="${plan.price || ''}" required type="number"/><input class="p-keys form-input" placeholder="Stock" value="${plan.keys || 1}" type="number"/><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();"><i class="fas fa-trash"></i></button></div>`;
+            });
+        }
+        plansContainer.innerHTML = html;
+        openModal('modal-edit-panel');
+    };
+
+    window.addEditPlanRow = () => {
+        const container = document.getElementById('edit-plans-container');
+        const row = document.createElement('div'); row.className = 'edit-plan-row';
+        row.innerHTML = `<div style="display: flex; gap: 10px; margin-bottom: 10px;"><input class="p-label form-input" placeholder="Plan Name" required type="text" style="flex:2;"/><input class="p-price form-input" placeholder="Price (₹)" required type="number"/><input class="p-keys form-input" placeholder="Stock" value="1" type="number"/><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();"><i class="fas fa-trash"></i></button></div>`;
+        container.appendChild(row);
+    };
+
+    document.getElementById('btn-save-edit-panel').onclick = async () => {
+        const id = document.getElementById('edit-p-id').value;
+        const ytId = extractYTId(document.getElementById('edit-p-yt').value);
+        if(!ytId) return showToast("Invalid YouTube Link", "error");
+        const plansData = {}; let hasValidPlan = false;
+        document.querySelectorAll('.edit-plan-row').forEach((row, index) => {
+            const lbl = row.querySelector('.p-label').value.trim();
+            const p = parseFloat(row.querySelector('.p-price').value);
+            const k = parseInt(row.querySelector('.p-keys').value) || 1;
+            if(lbl && p >= 0) { plansData[`plan_${index}`] = { label: lbl, name: lbl, price: p, keys: k }; hasValidPlan = true; }
+        });
+        if(!hasValidPlan) return showToast("Add at least one valid plan", "error");
+        showLoader();
+        try {
+            await update(ref(db, `panels/${id}`), {
+                name: document.getElementById('edit-p-name').value,
+                logo: document.getElementById('edit-p-logo').value,
+                category: document.getElementById('edit-p-category').value,
+                youtube: ytId,
+                link: document.getElementById('edit-p-link').value,
+                feedback: document.getElementById('edit-p-feedback').value,
+                description: document.getElementById('edit-p-desc').value,
+                plans: plansData
+            });
+            showToast("Panel updated!");
+            closeModal('modal-edit-panel');
+            window.loadSection('manage-panels');
+        } catch (e) { showToast("Update failed", "error"); hideLoader(); }
+    };
+
+    document.getElementById('btn-save-settings').onclick = async () => {
+        showLoader();
+        try {
+            const zapKey = document.getElementById('set-zap-key').value.trim();
+            const upiId = document.getElementById('set-upi').value.trim();
+            const upiQr = document.getElementById('set-qr').value.trim();
+            await set(ref(db, 'settings/payment'), { zap_key: zapKey, upiId: upiId, qrImage: upiQr });
+            await set(ref(db, 'deposit_settings'), {
+                zap_key: zapKey,
+                upi_id: upiId,
+                upi_qr: upiQr,
+                binance_pay_id: document.getElementById('set-crypto-payid').value.trim(),
+                usdt_address: document.getElementById('set-crypto-address').value.trim(),
+                crypto_rate: document.getElementById('set-crypto-rate').value.trim(),
+                crypto_qr: document.getElementById('set-crypto-qr').value.trim()
+            });
+            window.ZAP_KEY = zapKey;
+            showToast("Payment Settings Saved!");
+        } catch (e) { showToast("Failed to save", "error"); }
+        hideLoader();
+    };
+
+    document.getElementById('btn-save-contact').onclick = async () => {
+        showLoader();
+        try {
+            await set(ref(db, 'support_links'), {
+                whatsapp: document.getElementById('set-wa').value.trim(),
+                telegram_login: document.getElementById('set-tg-login').value.trim(),
+                telegram_dashboard: document.getElementById('set-tg-dash').value.trim()
+            });
+            showToast("Support Links Saved!");
+        } catch (e) { showToast("Failed to save", "error"); }
+        hideLoader();
+    };
+
+    document.getElementById('btn-save-branding').onclick = async () => {
+        showLoader();
+        try {
+            await set(ref(db, 'settings/branding'), { name: document.getElementById('brand-name').value, logo: document.getElementById('brand-logo').value });
+            showToast("Branding Updated!");
+            initBranding();
+        } catch (e) { showToast("Failed to save", "error"); }
+        hideLoader();
+    };
+
+    function renderRecentPayments(list) {
+        const container = document.getElementById('recent-payments-list');
+        if(list.length === 0) { container.innerHTML = '<div style="padding:20px; text-align:center; color:var(--text-muted);">No recent activity</div>'; return; }
+        let html = '';
+        list.forEach(p => {
+            const color = p.status === 'approved' ? 'var(--success)' : (p.status === 'rejected' ? 'var(--danger)' : 'var(--warning)');
+            let icon = '<i class="fas fa-hand-holding-usd" style="color:var(--success);"></i>';
+            if(p.id && p.id.startsWith('ORD')) icon = '<i class="fas fa-bolt" style="color:var(--danger);"></i>';
+            if(p.id && p.id.startsWith('CRY')) icon = '<i class="fab fa-bitcoin" style="color:var(--neon-crypto);"></i>';
+            html += `
+                <div style="display:flex; align-items:center; gap:15px; padding:12px 15px; border-radius: 12px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); margin-bottom: 10px;">
+                    <div style="width:45px; height:45px; border-radius:12px; background:var(--surface-light); display:flex; justify-content:center; align-items:center; font-size:18px;">${icon}</div>
+                    <div style="flex:1;"><strong style="display:block; font-size:14px;">${p.email || p.uid}</strong><span style="font-size:11px; color:var(--text-muted);">${p.timestamp ? new Date(p.timestamp).toLocaleDateString() : ''}</span></div>
+                    <div style="font-weight:800; font-size:15px; color:${color};">₹${p.amount}</div>
+                </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function renderGatewayTable(payList) {
+        const tbody = document.getElementById('gateway-tbody');
+        let html = '';
+        payList.forEach(p => {
+            const email = p.email || (usersDataCache[p.uid] ? usersDataCache[p.uid].email : p.uid);
+            let actions = '';
+            if (p.status === 'pending') {
+                actions = `
+                    <button class="btn btn-success btn-sm" onclick="handleGatewayAction('${p.id}', '${p.uid}', ${p.amount}, 'approved', this)"><i class="fas fa-check"></i> Accept</button>
+                    <button class="btn btn-danger btn-sm" onclick="handleGatewayAction('${p.id}', '${p.uid}', 0, 'rejected', this)"><i class="fas fa-times"></i> Reject</button>`;
+            } else actions = `<span style="font-size:12px; color:var(--text-muted);"><i class="fas fa-check-double"></i> Processed</span>`;
+            const refId = p.id;
+            html += `
+                <tr>
+                    <td>${p.timestamp ? new Date(p.timestamp).toLocaleString() : 'N/A'}</td>
+                    <td><strong>${email}</strong><br><span style="font-size:11px; color:var(--accent);">${p.phone || 'No Phone'}</span></td>
+                    <td style="color:var(--success); font-weight:600;">₹${p.amount}</td>
+                    <td style="font-family:monospace; background:rgba(0,0,0,0.2); padding:4px 8px; border-radius:6px;">${refId}</td>
+                    <td><span class="badge badge-${p.status}">${p.status}</span></td>
+                    <td style="display:flex; gap:5px;">${actions}</td>
+                </tr>`;
+        });
+        tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No records found</td></tr>';
+    }
+
+    window.handleGatewayAction = async (payId, uid, amount, action, btn) => {
+        if(!confirm(`Confirm ${action.toUpperCase()}?`)) return;
+        const originalText = btn.innerHTML;
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        showLoader();
+        try {
+            if (action === 'approved') {
+                const txRef = ref(db, `gateway_payments/${payId}`);
+                const result = await runTransaction(txRef, (data) => {
+                    if (data && data.status === 'pending') { data.status = 'approved'; return data; }
+                    return undefined;
+                });
+                if (result.committed) {
+                    await runTransaction(ref(db, `users/${uid}/balance`), (bal) => (bal || 0) + parseFloat(amount));
+                    await update(ref(db, `transactions/${uid}/${payId}`), { status: 'success' });
+                    showToast("Payment approved and balance added!");
+                    window.loadSection('gateway');
+                } else showToast("Payment already processed.", "error");
+            } else {
+                await update(ref(db, `gateway_payments/${payId}`), { status: 'rejected' });
+                await update(ref(db, `transactions/${uid}/${payId}`), { status: 'failed' });
+                showToast("Payment rejected!");
+                window.loadSection('gateway');
+            }
+        } catch (e) { showToast("Action failed", "error"); btn.disabled = false; btn.innerHTML = originalText; }
+        hideLoader();
+    };
+
+    function renderManualTable(manualList) {
+        const tbody = document.getElementById('manual-tbody');
+        let html = '';
+        manualList.forEach(d => {
+            const email = d.email || (usersDataCache[d.uid] ? usersDataCache[d.uid].email : d.uid);
+            let actions = '';
+            if (d.status === 'pending') {
+                actions = `
+                    <button class="btn btn-success btn-sm" onclick="handleManualAction('${d.id}', '${d.uid}', ${d.amount}, 'approved', this)"><i class="fas fa-check"></i> Accept</button>
+                    <button class="btn btn-danger btn-sm" onclick="handleManualAction('${d.id}', '${d.uid}', 0, 'rejected', this)"><i class="fas fa-times"></i> Reject</button>`;
+            } else actions = `<span style="font-size:12px; color:var(--text-muted);"><i class="fas fa-check-double"></i> Processed</span>`;
+            const imgBtn = d.screenshot ? `<button class="btn btn-outline btn-sm" onclick="openImageModal('${d.screenshot}')"><i class="fas fa-image"></i></button>` : '';
+            html += `
+                <tr>
+                    <td>${d.timestamp ? new Date(d.timestamp).toLocaleString() : 'N/A'}</td>
+                    <td><strong>${email}</strong></td>
+                    <td style="color:var(--success); font-weight:600;">₹${d.amount}</td>
+                    <td><span style="font-size:11px; color:var(--accent);">${d.app || 'Unknown'}</span><br><span style="font-family:monospace; background:rgba(0,0,0,0.2); padding:2px 6px; border-radius:4px;">${d.utr}</span></td>
+                    <td><span class="badge badge-${d.status}">${d.status}</span></td>
+                    <td style="display:flex; gap:5px;">${imgBtn} ${actions}</td>
+                </tr>`;
+        });
+        tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No records found</td></tr>';
+    }
+
+    window.handleManualAction = async (txId, uid, amount, action, btn) => {
+        if(!confirm(`Confirm ${action.toUpperCase()}?`)) return;
+        const originalText = btn.innerHTML;
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        showLoader();
+        try {
+            if (action === 'approved') {
+                const txRef = ref(db, `manual_deposits/${txId}`);
+                const result = await runTransaction(txRef, (data) => {
+                    if (data && data.status === 'pending') { data.status = 'approved'; return data; }
+                    return undefined;
+                });
+                if (result.committed) {
+                    await runTransaction(ref(db, `users/${uid}/balance`), (bal) => (bal || 0) + parseFloat(amount));
+                    await update(ref(db, `transactions/${uid}/${txId}`), { status: 'success' });
+                    showToast("Manual deposit approved!");
+                    window.loadSection('manual');
+                } else showToast("Already processed.", "error");
+            } else {
+                await update(ref(db, `manual_deposits/${txId}`), { status: 'rejected' });
+                await update(ref(db, `transactions/${uid}/${txId}`), { status: 'failed' });
+                showToast("Rejected!");
+                window.loadSection('manual');
+            }
+        } catch (e) { showToast("Action failed", "error"); btn.disabled = false; btn.innerHTML = originalText; }
+        hideLoader();
+    };
+
+    function renderCryptoTable(cryptoList) {
+        const tbody = document.getElementById('crypto-tbody');
+        let html = '';
+        cryptoList.forEach(d => {
+            const email = d.email || (usersDataCache[d.uid] ? usersDataCache[d.uid].email : d.uid);
+            let actions = '';
+            if (d.status === 'pending') {
+                actions = `
+                    <button class="btn btn-success btn-sm" onclick="handleCryptoAction('${d.id}', '${d.uid}', ${d.amount}, 'approved', this)"><i class="fas fa-check"></i> Accept</button>
+                    <button class="btn btn-danger btn-sm" onclick="handleCryptoAction('${d.id}', '${d.uid}', 0, 'rejected', this)"><i class="fas fa-times"></i> Reject</button>`;
+            } else actions = `<span style="font-size:12px; color:var(--text-muted);"><i class="fas fa-check-double"></i> Processed</span>`;
+            const imgBtn = d.screenshot ? `<button class="btn btn-outline btn-sm" onclick="openImageModal('${d.screenshot}')"><i class="fas fa-image"></i></button>` : '';
+            html += `
+                <tr>
+                    <td>${d.timestamp ? new Date(d.timestamp).toLocaleString() : 'N/A'}</td>
+                    <td><strong>${email}</strong></td>
+                    <td style="color:var(--neon-crypto); font-weight:600;">₹${d.amount}</td>
+                    <td><span style="font-family:monospace; background:rgba(0,0,0,0.2); padding:2px 6px; border-radius:4px; color:var(--neon-crypto);">${d.hash}</span><br><span style="font-size:11px; color:var(--text-muted);">${d.note || 'No Note'}</span></td>
+                    <td><span class="badge badge-${d.status}">${d.status}</span></td>
+                    <td style="display:flex; gap:5px;">${imgBtn} ${actions}</td>
+                </tr>`;
+        });
+        tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No records found</td></tr>';
+    }
+
+    window.handleCryptoAction = async (txId, uid, amount, action, btn) => {
+        if(!confirm(`Confirm ${action.toUpperCase()}?`)) return;
+        const originalText = btn.innerHTML;
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        showLoader();
+        try {
+            if (action === 'approved') {
+                const txRef = ref(db, `crypto_deposits/${txId}`);
+                const result = await runTransaction(txRef, (data) => {
+                    if (data && data.status === 'pending') { data.status = 'approved'; return data; }
+                    return undefined;
+                });
+                if (result.committed) {
+                    await runTransaction(ref(db, `users/${uid}/balance`), (bal) => (bal || 0) + parseFloat(amount));
+                    await update(ref(db, `transactions/${uid}/${txId}`), { status: 'success' });
+                    showToast("Crypto deposit approved!");
+                    window.loadSection('crypto');
+                } else showToast("Already processed.", "error");
+            } else {
+                await update(ref(db, `crypto_deposits/${txId}`), { status: 'rejected' });
+                await update(ref(db, `transactions/${uid}/${txId}`), { status: 'failed' });
+                showToast("Rejected!");
+                window.loadSection('crypto');
+            }
+        } catch (e) { showToast("Action failed", "error"); btn.disabled = false; btn.innerHTML = originalText; }
+        hideLoader();
+    };
+
+    function renderUsersTable(users) {
+        const tbody = document.getElementById('users-tbody');
+        let html = '';
+        for(let uid in users) {
+            const u = users[uid];
+            const statusBadge = u.status === 'banned' ? '<span class="badge badge-danger">Banned</span>' : '<span class="badge badge-success">Active</span>';
+            const banAction = u.status === 'banned' ? `<button class="btn btn-outline btn-sm" onclick="toggleBan('${uid}', 'active')"><i class="fas fa-check"></i> Unban</button>` : `<button class="btn btn-danger btn-sm" onclick="toggleBan('${uid}', 'banned')"><i class="fas fa-ban"></i> Ban</button>`;
+            html += `<tr><td>${u.joined ? new Date(u.joined).toLocaleDateString() : '-'}</td><td><strong>${u.email}</strong><br><span style="font-size:10px; color:var(--text-muted); font-family:monospace;">${uid}</span></td><td style="color:var(--success); font-weight:bold; font-size:14px;">₹${parseFloat(u.balance || 0).toFixed(2)}</td><td>${statusBadge}</td><td style="display:flex; gap:5px;"><button class="btn btn-primary btn-sm" onclick="openBalanceModal('${uid}', ${u.balance || 0})"><i class="fas fa-wallet"></i> Bal</button>${banAction}</td></tr>`;
+        }
+        tbody.innerHTML = html || '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No users found</td></tr>';
+    }
+
+    window.toggleBan = async (uid, status) => {
+        showLoader();
+        try { await update(ref(db, `users/${uid}`), { status: status }); showToast(status === 'banned' ? "User Banned" : "User Unbanned"); window.loadSection('users'); }
+        catch(e) { showToast("Error", "error"); hideLoader(); }
+    };
+
+    window.openBalanceModal = (uid, current) => {
+        document.getElementById('edit-bal-uid').value = uid;
+        document.getElementById('edit-bal-current').value = current.toFixed(2);
+        document.getElementById('edit-bal-amount').value = '';
+        openModal('modal-balance');
+    };
+
+    document.getElementById('btn-save-balance').onclick = async () => {
+        const uid = document.getElementById('edit-bal-uid').value;
+        const current = parseFloat(document.getElementById('edit-bal-current').value);
+        const amount = parseFloat(document.getElementById('edit-bal-amount').value);
+        const type = document.getElementById('edit-bal-type').value;
+        if(isNaN(amount) || amount < 0) return showToast("Enter a valid number", "error");
+        let newBal = current; let diff = amount;
+        if(type === 'add') newBal += amount;
+        if(type === 'deduct') { newBal = Math.max(0, newBal - amount); diff = -amount; }
+        if(type === 'set') { newBal = amount; diff = amount - current; }
+        showLoader();
+        try {
+            await set(ref(db, `users/${uid}/balance`), newBal);
+            await push(ref(db, `transactions/${uid}`), {
+                type: 'admin_adjustment', amount: diff, status: 'success',
+                timestamp: serverTimestamp(), description: 'Admin balance adjustment'
+            });
+            showToast("User balance updated!");
+            closeModal('modal-balance');
+            window.loadSection('users');
+        } catch(e) { showToast("Failed to update", "error"); hideLoader(); }
+    };
+
+    function renderPurchasesTable(list) {
+        const tbody = document.getElementById('purchases-tbody');
+        let html = '';
+        list.forEach(p => {
+            const email = p.email || (usersDataCache[p.uid] ? usersDataCache[p.uid].email : p.uid);
+            html += `
+                <tr>
+                    <td>${p.date ? new Date(p.date).toLocaleString() : 'N/A'}</td>
+                    <td><strong>${email}</strong></td>
+                    <td><span style="color:var(--accent); font-weight:600;">${p.panelName || p.panelId || 'Panel'}</span> (${p.planName || p.plan || 'Plan'})</td>
+                    <td><span style="font-family:monospace; background:rgba(0,0,0,0.2); padding:4px 8px; border-radius:6px; color:var(--success); font-weight:bold;">${p.key || 'N/A'}</span></td>
+                </tr>`;
+        });
+        tbody.innerHTML = html || '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No purchases found</td></tr>';
+    }
+
+    document.getElementById('btn-add-promo').onclick = async () => {
+        const title = document.getElementById('promo-title').value.trim();
+        const img = document.getElementById('promo-img').value.trim();
+        const link = document.getElementById('promo-link').value.trim();
+        if(!title) return showToast("Title required", "error");
+        showLoader();
+        try {
+            await push(ref(db, 'promotions'), { title, image: img, link, status: 'active', timestamp: serverTimestamp() });
+            showToast("Promotion created!");
+            document.getElementById('promo-title').value = '';
+            document.getElementById('promo-img').value = '';
+            document.getElementById('promo-link').value = '';
+            window.loadSection('promotions');
+        } catch(e) { showToast("Failed", "error"); hideLoader(); }
+    };
+
+    function renderPromotions(promos) {
+        const list = document.getElementById('promotions-list');
+        let html = '';
+        for(let id in promos) {
+            const p = promos[id];
+            html += `<div class="glass" style="padding:15px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;"><div><strong style="font-size:14px; display:block;">${p.title}</strong><span style="font-size:11px; color:var(--text-muted);">${p.link || 'No Link'}</span></div><button class="btn btn-danger btn-sm" onclick="deletePromo('${id}')"><i class="fas fa-trash"></i></button></div>`;
+        }
+        list.innerHTML = html || '<div style="padding:20px; text-align:center; color:var(--text-muted);">No promotions found</div>';
+    }
+
+    window.deletePromo = async (id) => {
+        if(!confirm("Delete promotion?")) return;
+        showLoader();
+        try { await remove(ref(db, `promotions/${id}`)); showToast("Deleted"); window.loadSection('promotions'); }
+        catch(e) { showToast("Error", "error"); hideLoader(); }
+    };
+
+    document.getElementById('btn-add-coupon').onclick = async () => {
+        const code = document.getElementById('coupon-code').value.trim().toUpperCase();
+        const discount = parseFloat(document.getElementById('coupon-discount').value);
+        const max = document.getElementById('coupon-max').value.trim();
+        if(!code || isNaN(discount)) return showToast("Valid Code and Discount required", "error");
+        showLoader();
+        try {
+            await set(ref(db, `coupons/${code}`), {
+                discount: discount,
+                maxUsage: max ? parseInt(max) : 'unlimited',
+                usedCount: 0,
+                status: 'active'
+            });
+            showToast("Coupon created!");
+            document.getElementById('coupon-code').value = '';
+            document.getElementById('coupon-discount').value = '';
+            document.getElementById('coupon-max').value = '';
+            window.loadSection('coupons');
+        } catch(e) { showToast("Failed", "error"); hideLoader(); }
+    };
+
+    function renderCoupons(coupons) {
+        const tbody = document.getElementById('coupons-tbody');
+        let html = '';
+        coupons.forEach(c => {
+            html += `<tr><td style="font-family:monospace; font-weight:bold; color:var(--accent);">${c.id}</td><td>${c.discount}%</td><td>${c.usedCount || 0} / ${c.maxUsage || '∞'}</td><td><span class="badge badge-${c.status}">${c.status}</span></td><td><button class="btn btn-danger btn-sm" onclick="deleteCoupon('${c.id}')"><i class="fas fa-trash"></i></button></td></tr>`;
+        });
+        tbody.innerHTML = html || '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No coupons found</td></tr>';
+    }
+
+    window.deleteCoupon = async (code) => {
+        if(!confirm(`Delete coupon ${code}?`)) return;
+        showLoader();
+        try { await remove(ref(db, `coupons/${code}`)); showToast("Deleted"); window.loadSection('coupons'); }
+        catch(e) { showToast("Error", "error"); hideLoader(); }
+    };
+</script>
+</body>
+</html>
