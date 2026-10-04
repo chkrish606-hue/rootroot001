@@ -157,19 +157,11 @@
         <p class="card-subtitle">Welcome back! Please enter your details to login.</p>
         <form id="login-form" autocomplete="off">
           <div class="input-group">
-            <input type="text" id="login-username" placeholder="Username" />
+            <input type="text" id="login-identifier" placeholder="Username or Email" required autocomplete="username" />
             <i class="fas fa-user icon"></i>
           </div>
           <div class="input-group">
-            <input type="email" id="login-email" placeholder="Email" required />
-            <i class="fas fa-envelope icon"></i>
-          </div>
-          <div class="input-group">
-            <input type="tel" id="login-phone" placeholder="Phone Number" />
-            <i class="fas fa-phone icon"></i>
-          </div>
-          <div class="input-group">
-            <input type="password" id="login-password" placeholder="Password" required />
+            <input type="password" id="login-password" placeholder="Password" required autocomplete="current-password" />
             <i class="fas fa-lock icon"></i>
             <button type="button" class="toggle-pass" onclick="togglePass('login-password', this)"><i class="fas fa-eye"></i></button>
           </div>
@@ -323,15 +315,34 @@ onAuthStateChanged(auth, (user) => {
 
 document.getElementById('login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const email = document.getElementById('login-email').value.trim();
+  const identifier = document.getElementById('login-identifier').value.trim();
   const pass = document.getElementById('login-password').value;
-  const username = document.getElementById('login-username').value.trim();
-  const phone = document.getElementById('login-phone').value.trim();
-  if (!email || !pass) return showToast("Email और Password भरें", "error");
+  
+  if (!identifier || !pass) return showToast("Username/Email और Password भरें", "error");
+  
   showLoader();
   try {
-    const cred = await signInWithEmailAndPassword(auth, email, pass);
-    if (username || phone) await update(ref(db, `users/${cred.user.uid}`), { username, phone });
+    let emailToUse = identifier;
+    
+    // अगर identifier में @ नहीं है तो समझो username है → DB से email ढूंढें
+    if (!identifier.includes('@')) {
+      const usersSnap = await get(ref(db, 'users'));
+      const users = usersSnap.val() || {};
+      let foundEmail = null;
+      for (let uid in users) {
+        if (users[uid].username && users[uid].username.toLowerCase() === identifier.toLowerCase()) {
+          foundEmail = users[uid].email;
+          break;
+        }
+      }
+      if (!foundEmail) {
+        hideLoader();
+        return showToast("Username नहीं मिला", "error");
+      }
+      emailToUse = foundEmail;
+    }
+    
+    await signInWithEmailAndPassword(auth, emailToUse, pass);
     showToast("Login Successful! Redirecting...", "success");
   } catch (err) {
     hideLoader();
@@ -346,6 +357,7 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
   const email = document.getElementById('signup-email').value.trim();
   const pass = document.getElementById('signup-password').value;
   if (!email || !pass || pass.length < 6) return showToast("Password कम से कम 6 अक्षर", "error");
+  if (!username) return showToast("Username भरें", "error");
   showLoader();
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
@@ -370,7 +382,7 @@ async function googleAuth() {
     const snap = await get(ref(db, `users/${user.uid}`));
     if (!snap.exists()) {
       await set(ref(db, `users/${user.uid}`), {
-        email: user.email, username: user.displayName || '',
+        email: user.email, username: user.displayName || user.email.split('@')[0],
         balance: 0, role: 'user',
         joined: new Date().toISOString(), createdAt: serverTimestamp()
       });
